@@ -112,6 +112,12 @@
     <!-- Save Location -->
     <button onclick="saveData()">Save Location</button>
 
+    <br><br>
+
+    <!-- Search functionality -->
+    <input type="text" id="searchInput" placeholder="Search by Customer or Company Name">
+    <button onclick="searchData()">Search</button>
+
     <h2>Saved Locations</h2>
     <div id="savedLocations"></div>
 
@@ -197,9 +203,9 @@
         }
 
         // Display saved locations
-        function displaySavedLocations() {
+        function displaySavedLocations(locationsToDisplay = []) {
             const savedLocationsDiv = document.getElementById('savedLocations');
-            const locations = JSON.parse(localStorage.getItem('locations')) || [];
+            const locations = locationsToDisplay.length > 0 ? locationsToDisplay : JSON.parse(localStorage.getItem('locations')) || [];
             savedLocationsDiv.innerHTML = '';
             locations.forEach((location, index) => {
                 savedLocationsDiv.innerHTML += `
@@ -218,6 +224,16 @@
                     </div>
                 `;
             });
+        }
+
+        // Search data
+        function searchData() {
+            const searchKeyword = document.getElementById('searchInput').value.toLowerCase();
+            const locations = JSON.parse(localStorage.getItem('locations')) || [];
+            const filteredLocations = locations.filter(location => {
+                return location.customerName.toLowerCase().includes(searchKeyword) || location.companyName.toLowerCase().includes(searchKeyword);
+            });
+            displaySavedLocations(filteredLocations);
         }
 
         // Edit location
