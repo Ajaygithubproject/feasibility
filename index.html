@@ -43,6 +43,10 @@
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             text-align: left;
+            transition: transform 0.2s ease;
+        }
+        .entry:hover {
+            transform: scale(1.05);
         }
         img {
             max-width: 100%;
@@ -66,6 +70,25 @@
             .entry {
                 padding: 10px;
             }
+            .entry img {
+                max-width: 100%;
+                height: auto;
+            }
+        }
+
+        /* For Image Upload and Preview */
+        .image-preview {
+            display: inline-block;
+            margin-top: 10px;
+            max-width: 100%;
+            max-height: 200px;
+            overflow: hidden;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+        }
+        .image-preview img {
+            width: 100%;
+            height: auto;
         }
     </style>
 </head>
@@ -80,6 +103,7 @@
     <br>
     <!-- Image Upload -->
     <input type="file" id="imageInput" accept="image/*">
+    <div class="image-preview" id="imagePreview"></div>
     <br><br>
     <!-- Get Location -->
     <button onclick="getLocation()">Get Location</button>
@@ -124,12 +148,16 @@
         // Image preview
         document.getElementById('imageInput').addEventListener('change', function(event) {
             const file = event.target.files[0];
+            const preview = document.getElementById('imagePreview');
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     currentImageSrc = e.target.result;
+                    preview.innerHTML = `<img src="${currentImageSrc}" alt="Image Preview">`;
                 };
                 reader.readAsDataURL(file);
+            } else {
+                preview.innerHTML = '';
             }
         });
 
@@ -207,6 +235,8 @@
             // Optionally, you can trigger the input to update the image preview.
             const imageInput = document.getElementById('imageInput');
             imageInput.value = ''; // To reset and allow new image upload if needed
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = `<img src="${currentImageSrc}" alt="Image Preview">`;
         }
 
         // Delete location
